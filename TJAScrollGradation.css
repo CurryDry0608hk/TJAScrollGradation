@@ -1,0 +1,23 @@
+body {
+    width: 480px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.center {
+    text-align: center;
+}
+
+#executionButton{
+    padding: 5px 20px;
+    font-size: 20px;
+}
+
+#copyToClipboard{
+    padding: 1px 5px;
+    font-size: 14px;
+}
+
+#resultTitle{
+    font-size: 30px;
+}

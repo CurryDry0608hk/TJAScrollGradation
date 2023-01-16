@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>スクロールグラデーション生成器</title>
+    <link rel="stylesheet" href="TJAScrollGradation.css">
+    <script src="TJAScrollGradation.js"></script>
+</head>
+<body>
+    <h1 class="center">スクロールグラデーション生成器</h1>
+
+    <p class="center">
+        <b>開始値</b><br>
+        <input type="text" id="startValue" value="1" style="text-align: center;" size="10" maxlength="16">
+    </p>
+
+    <p class="center">
+        <b id="valueTypeText">終了値</b><br>
+        <input type="text" id="endValue" value="2" style="text-align: center;" size="10" maxlength="16">
+    </p>
+
+    <p class="center">
+        <b>指定方法</b><br>
+        <label><input type="radio" name="valueType" value="end" onclick="valueTypeChanged()" checked>終了値指定</label>
+        <label><input type="radio" name="valueType" value="add" onclick="valueTypeChanged()">増分値指定</label>
+    </p>
+
+    <p class="center">
+        <b>変化箇所</b><br>
+        <label><input type="radio" name="changeAt" value="note" checked>音符単位</label>
+        <label><input type="radio" name="changeAt" value="measure">小節単位</label>
+    </p>
+
+    <p class="center">
+        <b>変化タイプ</b><br>
+        <label><input type="radio" name="changeType" value="diff">等差</label>
+        <label><input type="radio" name="changeType" value="ratio" checked>等比</label>
+    </p>
+
+    <p class="center">
+        <b>小数点以下の桁数</b><br>
+        <select id="decimalPlace">
+            <option value="0">&ensp;0</option>
+            <option value="1">&ensp;1</option>
+            <option value="2">&ensp;2</option>
+            <option value="3">&ensp;3</option>
+            <option value="4">&ensp;4</option>
+            <option value="5">&ensp;5</option>
+            <option value="6" selected>&ensp;6</option>
+            <option value="7">&ensp;7</option>
+            <option value="8">&ensp;8</option>
+            <option value="9">&ensp;9</option>
+            <option value="10">10</option>
+        </select>
+    </p>
+
+    <p class="center">
+        <label><input type="checkbox" id="optimization" value="true" checked>#SCROLLの最適化を行う</label>
+    </p>
+
+    <p class="center">
+        <b>譜面データ</b><br>
+        <textarea id="tjaData" cols="48" rows="16"></textarea>
+    </p>
+    
+    <div class="center">
+        <button id="executionButton" onclick="executionButtonClicked()">実行</button>
+    </div>
+
+    <p class="center">
+        <b id="resultTitle">実行結果</b><br>
+        <button id="copyToClipboard" onclick="copyToClipboard()">クリップボードにコピー</button>
+        <textarea id="resultArea" cols="48" rows="16" readonly></textarea>
+    </p>
+
+</body>
+</html>
