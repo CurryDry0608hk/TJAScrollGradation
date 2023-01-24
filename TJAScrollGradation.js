@@ -6,6 +6,7 @@ function executionButtonClicked(){
     let valueType = radioChecked(document.getElementsByName("valueType"));  //指定方法 end/add
     let changeAt = radioChecked(document.getElementsByName("changeAt"));  //変化箇所 note/maesure
     let changeType = radioChecked(document.getElementsByName("changeType"));  //変化タイプ diff/ratio
+    let calcType = radioChecked(document.getElementsByName("calcType"));  //計算方式 note/second
     let decimalPlace = document.getElementById("decimalPlace").value;  //小数点以下の桁数
     let scrollOpti = document.getElementById("optimization").checked;  //最適化 true/false
     let tjaData = document.getElementById("tjaData").value.replace(/\r\n|\r/g, "\n");  //譜面データ(改行コード正規化)
@@ -16,12 +17,17 @@ function executionButtonClicked(){
     //譜面データを配列に分割
     let tjaArray = tjaDivide(tjaData);
     //分割確認
-    //for(let val of tjaArray){
-    //    resultArea.value += val + "／";
-    //}
+    /*for(let val of tjaArray){
+        resultArea.value += val + "／";
+    }
+    return;*/
 
     //譜面データにスクグラを適用
-    calcScrollGrad(tjaArray);
+    if(calcType == "note"){
+        calcScrollGradTypeNote(tjaArray);
+    }else if(calcType == "second"){
+        calcScrollGradTypeSecond(tjaArray);
+    }
 
     //結果を出力
     let outputStr = "";
@@ -29,6 +35,9 @@ function executionButtonClicked(){
         outputStr += val;
     }
     resultArea.value = outputStr;
+
+
+
 
 
 
@@ -50,12 +59,13 @@ function executionButtonClicked(){
         }
 
         //音符単位であれば音符ごとに分割して、受け取った配列に入れる
+        //配列の要素分ループ
         for(let i = 0; i < tmpArray.length; i++){
             //配列の要素を変数に保存
             let tmpStr = tmpArray[i];
 
-            //音符単位なら
-            if(changeAt == "note"){
+            //音符単位もしくは秒数基準の場合
+            if(changeAt == "note" || calcType == "second"){
 
                 //この行に音符が含まれている場合
                 if((new RegExp(/^[0-9]+/)).test(tmpStr)){
@@ -94,8 +104,12 @@ function executionButtonClicked(){
 
 
 
-    //譜面データにスクグラを適用する関数(譜面データ(配列))
-    function calcScrollGrad(tjaArray){
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //譜面データにスクグラを適用する関数(譜面データ(配列)) 音符基準版
+    function calcScrollGradTypeNote(tjaArray){
 
         //変化回数を予め計算
         let changeCount = 0;
@@ -141,9 +155,6 @@ function executionButtonClicked(){
         //変化量確認
         //resultArea.value += changeValue + "／";
 
-
-
-    
 
 
         ////#SCROLL値を計算して記入
@@ -259,6 +270,227 @@ function executionButtonClicked(){
             return "#SCROLL " + Math.round(scroll * Math.pow(10, decimalPlace)) / Math.pow(10, decimalPlace);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //譜面データにスクグラを適用する関数(譜面データ(配列)) 秒数基準版
+    function calcScrollGradTypeSecond(tjaArray){
+
+        //変数等準備
+        let startBPM = 240;
+        let endBPM = 240;
+        let nowBPM = 0;
+        let nowMeasure = 1;
+        let totalSecond = 0;
+        let nowNotes = 0;
+
+
+        ////最初のBPMを決定
+
+        //譜面内にBPMCHANGEがあるか検索
+        let isBpmchange = false;
+        let firstBpmchangeIndex = 0;
+        for(let i = 0; i < tjaArray.length; i++){
+            if((new RegExp(/^#BPMCHANGE -?\d+(?:\.\d+)?/)).test(tjaArray[i])){
+                isBpmchange = true;
+                firstBpmchangeIndex = i;
+                break;
+            }
+        }
+
+        //BPMCHANGEがあるなら
+        if(isBpmchange){
+            //最初の音符を検索
+            let firstNoteIndex = 0;
+            for(let i = 0; i < tjaArray.length; i++){
+                if((new RegExp(/^\d*,/)).test(tjaArray[i])){
+                    firstNoteIndex = i;
+                    break;
+                }
+            }
+            //最初の音符よりも最初のBPMCHANGEの方が前なら
+            if(firstBpmchangeIndex < firstNoteIndex){
+                //最初のBPMCHANGEの値を最初のBPMにする
+                startBPM = (new RegExp(/^#BPMCHANGE (-?\d+(?:\.\d+)?)/)).exec(tjaArray[firstBpmchangeIndex])[1];
+            //そうでないなら
+            }else{
+                //最初のBPMの入力を求める
+                startBPM = prompt("譜面データの最初のBPM値を入力してください。");
+                if(isNaN(startBPM)){
+                    alert("入力が数値ではありません。");
+                    return;
+                }
+            }
+
+            //最後のBPMを検索
+            let lastBpmchangeIndex = 0;
+            for(let i = tjaArray.length - 1; i >= 0; i--){
+                if((new RegExp(/^#BPMCHANGE -?\d+(?:\.\d+)?/)).test(tjaArray[i])){
+                    lastBpmchangeIndex = i;
+                    break;
+                }
+            }
+            //最後のBPMCHANGEの値を最後のBPMにする
+            endBPM = (new RegExp(/^#BPMCHANGE (-?\d+(?:\.\d+)?)/)).exec(tjaArray[lastBpmchangeIndex])[1];
+        }
+
+        //開始値と終了値を見た目BPMに変換
+        startValue *= startBPM;
+        endValue *= endBPM;
+
+
+
+        ////全体の秒数を計算する
+        let detailArray = new Array(tjaArray.length);
+        nowBPM = startBPM;
+        
+        //配列の要素分ループ
+        for(let i = 0; i < tjaArray.length; i++){
+            //配列の要素を変数に保存
+            let tmpStr = tjaArray[i];
+
+            //#BPMCHANGEの場合
+            if((new RegExp(/^#BPMCHANGE -?\d+(?:\.\d+)?/)).test(tmpStr)){
+                //現在のBPMを変更
+                nowBPM = (new RegExp(/^#BPMCHANGE (-?\d+(?:\.\d+)?)/)).exec(tmpStr)[1];
+            }
+
+            //#MEASUREの場合
+            if((new RegExp(/^#MEASURE -?\d+(?:\.\d+)?\/\d+(?:\.\d+)?/)).test(tmpStr)){
+                //現在のMEASUREを変更
+                let match = (new RegExp(/^#MEASURE (-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)/)).exec(tmpStr);
+                nowMeasure = match[1] / match[2];
+            }
+
+            //音符のみの場合(コンマなし)
+            if((new RegExp(/^\d+/)).test(tmpStr) && !(new RegExp(/^\d*,/)).test(tmpStr)){
+                //小節の頭かどうか
+                let isMeasureHead = (nowNotes == 0);
+
+                //音符があるかどうか
+                let hasNotes = (new RegExp(/^[1-9]/)).test(tmpStr);
+
+                //情報を保存
+                detailArray[i] = {nowSecond:totalSecond, nowBPM:nowBPM, isMeasureHead:isMeasureHead, hasNotes:hasNotes};
+
+                //小節の頭なら
+                if(isMeasureHead){
+                    //一番近いコンマを検索
+                    let nextComma = tjaArray.length;
+                    for(let j = i; j < tjaArray.length; j++){
+                        if((new RegExp(/^\d*,/)).test(tjaArray[j])){
+                            nextComma = j;
+                            break;
+                        }
+                    }
+                    //総音符数を数える
+                    for(let j = i; j <= nextComma; j++){
+                        if((new RegExp(/^\d+/)).test(tjaArray[j])){
+                            nowNotes += (new RegExp(/^\d+/)).exec(tjaArray[j])[0].length;
+                        }
+                    }
+                }
+
+                //秒数を計算して加算
+                totalSecond += (240.0 / nowBPM) * nowMeasure * (1.0 / nowNotes);
+            }
+
+            //コンマありの場合
+            if((new RegExp(/^\d*,/)).test(tmpStr)){
+                //小節の頭かどうか
+                let isMeasureHead = (nowNotes == 0);
+
+                //音符があるかどうか
+                let hasNotes = (new RegExp(/^[1-9]/)).test(tmpStr);
+
+                //情報を保存
+                detailArray[i] = {nowSecond:totalSecond, nowBPM:nowBPM, isMeasureHead:isMeasureHead, hasNotes:hasNotes};
+
+                //小節の頭ならnowNotesを1にする
+                if(isMeasureHead) nowNotes = 1;
+
+                //秒数を計算して加算
+                totalSecond += (240.0 / nowBPM) * nowMeasure * (1.0 / nowNotes);
+
+                //nowNotesをリセット
+                nowNotes = 0;
+            }
+        }
+
+
+
+        ////SCROLL値を計算して出力する
+
+        //配列の要素分ループ
+        for(let i = 0; i < tjaArray.length; i++){
+            //変数に格納
+            let detail = detailArray[i];
+
+            //要素に値が入っていたら
+            if(detail != undefined){
+                //小節の頭、もしくは音符ごとかつノーツを持っている、もしくは音符ごとかつ最適化をしない
+                if((detail.isMeasureHead) || (changeAt == "note" && detail.hasNotes) || (changeAt == "note" && !scrollOpti)){
+                    //前の要素の末尾が改行でなければ改行する
+                    let newLine = "";
+                    if(!(new RegExp(/\n$/)).test(tjaArray[i-1])){
+                        newLine = "\n";
+                    }
+                    //#SCROLL値を計算して追記
+                    tjaArray[i] = newLine + scroll(detail.nowSecond, detail.nowBPM) + "\n" + tjaArray[i];
+                }
+            }
+        }
+
+        //最後に#SCROLLを追加
+        tjaArray.push("\n" + scroll(totalSecond, nowBPM));
+
+
+
+
+
+
+        //#SCROLL値を計算するメソッド
+        function scroll(nowSecond, nowBPM){
+
+            //#SCROLL値を格納する変数
+            let value = 0;
+
+            switch(changeType){
+                //等差
+                case "diff":
+                    value = diff(startValue, endValue, nowSecond / totalSecond) / nowBPM;
+                    break;
+
+                //等比
+                case "ratio":
+                    value = ratio(startValue, endValue, nowSecond / totalSecond) / nowBPM;
+                    break;
+            }
+
+            //#SCROLLを返す
+            return "#SCROLL " + Math.round(value * Math.pow(10, decimalPlace)) / Math.pow(10, decimalPlace);
+
+            //等差
+            function diff(start, end, now){
+                return start + (end - start) * now;
+            }
+
+            //等比
+            function ratio(start, end, now){
+                return start * Math.pow(end / start, now);
+            }
+        }
+    }
 }
 
 
@@ -279,10 +511,33 @@ function radioChecked(elements){
 function valueTypeChanged(){
     let valueTypeText = document.getElementById("valueTypeText");
     let valueType = radioChecked(document.getElementsByName("valueType"));
+    let calcType = radioChecked(document.getElementsByName("calcType"));
+
+    //テキストを変える
     if(valueType == "end"){
         valueTypeText.innerText = "終了値";
     }else if(valueType == "add"){
         valueTypeText.innerText = "増分値";
+    }
+
+    //増分値かつ秒数基準の場合は、終了値に変える
+    if(valueType == "add" && calcType == "second"){
+        document.getElementsByName("valueType").item(0).checked = true;
+        alert("計算方式が秒数基準の場合は、値の指定方法を増分値指定にすることは出来ません。");
+        valueTypeChanged();
+    }
+}
+
+//計算方式が変更されたときの関数
+function calcTypeChanged(){
+    let calcType = radioChecked(document.getElementsByName("calcType"));
+    let valueType = radioChecked(document.getElementsByName("valueType"));
+
+    //増分値かつ秒数基準の場合は、終了値に変える
+    if(valueType == "add" && calcType == "second"){
+        document.getElementsByName("valueType").item(0).checked = true;
+        alert("計算方式が秒数基準の場合は、値の指定方法を増分値指定にすることは出来ません。");
+        valueTypeChanged();
     }
 }
 
