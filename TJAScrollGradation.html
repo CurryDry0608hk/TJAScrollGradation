@@ -26,20 +26,26 @@
 
     <p class="center">
         <b>指定方法</b><br>
-        <label><input type="radio" name="valueType" value="end" onclick="valueTypeChanged()" checked>終了値指定</label>
+        <label><input type="radio" name="valueType" value="end" onclick="valueTypeChanged()" checked>終了値指定</label><br>
         <label><input type="radio" name="valueType" value="add" onclick="valueTypeChanged()">増分値指定</label>
     </p>
 
     <p class="center">
         <b>変化箇所</b><br>
-        <label><input type="radio" name="changeAt" value="note" checked>音符単位</label>
-        <label><input type="radio" name="changeAt" value="measure">小節単位</label>
+        <label><input type="radio" name="changeAt" value="note" checked>音符ごと</label><br>
+        <label><input type="radio" name="changeAt" value="measure">小節ごと</label>
     </p>
 
     <p class="center">
         <b>変化タイプ</b><br>
-        <label><input type="radio" name="changeType" value="diff">等差</label>
+        <label><input type="radio" name="changeType" value="diff">等差</label><br>
         <label><input type="radio" name="changeType" value="ratio" checked>等比</label>
+    </p>
+
+    <p class="center">
+        <b>計算方式</b><br>
+        <label><input type="radio" name="calcType" value="note" onclick="calcTypeChanged()">音符基準</label><br>
+        <label><input type="radio" name="calcType" value="second" onclick="calcTypeChanged()" checked>秒数基準</label>
     </p>
 
     <p class="center">
@@ -74,7 +80,7 @@
 
     <p class="center">
         <b id="resultTitle">実行結果</b><br>
-        <button id="copyToClipboard" onclick="copyToClipboard()">クリップボードにコピー</button>
+        <button id="copyToClipboard" onclick="copyToClipboard()">クリップボードにコピー</button><br>
         <textarea id="resultArea" cols="48" rows="16" readonly></textarea>
     </p>
 
