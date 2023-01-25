@@ -440,9 +440,9 @@ function executionButtonClicked(){
             if(detail != undefined){
                 //小節の頭、もしくは音符ごとかつノーツを持っている、もしくは音符ごとかつ最適化をしない
                 if((detail.isMeasureHead) || (changeAt == "note" && detail.hasNotes) || (changeAt == "note" && !scrollOpti)){
-                    //前の要素の末尾が改行でなければ改行する
+                    //前の要素の末尾が改行でなく、かつiが0より大きいなら改行する
                     let newLine = "";
-                    if(!(new RegExp(/\n$/)).test(tjaArray[i-1])){
+                    if(i > 0 && !(new RegExp(/\n$/)).test(tjaArray[i-1])){
                         newLine = "\n";
                     }
                     //#SCROLL値を計算して追記
