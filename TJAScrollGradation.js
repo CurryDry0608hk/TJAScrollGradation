@@ -313,7 +313,7 @@ function executionButtonClicked(){
             //最初の音符を検索
             let firstNoteIndex = 0;
             for(let i = 0; i < tjaArray.length; i++){
-                if((new RegExp(/^\d*,/)).test(tjaArray[i])){
+                if((new RegExp(/^\d+/)).test(tjaArray[i]) || (new RegExp(/^\d*,/)).test(tjaArray[i])){
                     firstNoteIndex = i;
                     break;
                 }
