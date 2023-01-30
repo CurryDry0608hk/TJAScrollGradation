@@ -5,8 +5,8 @@ function executionButtonClicked(){
     let endValue = document.getElementById("endValue").value;  //終了値(増分値)
     let valueType = radioChecked(document.getElementsByName("valueType"));  //指定方法 end/add
     let changeAt = radioChecked(document.getElementsByName("changeAt"));  //変化箇所 note/maesure
-    let changeType = radioChecked(document.getElementsByName("changeType"));  //変化タイプ diff/ratio/ease
-    let easeType = document.getElementById('easeType').value;  //イージングの種類
+    let changeType = radioChecked(document.getElementsByName("changeType"));  //変化タイプ diff/ratio
+    let ratioAccel = document.getElementById("ratioAccel").value;  //加速の強さ 1.00~2.00
     let calcType = radioChecked(document.getElementsByName("calcType"));  //計算方式 note/second
     let decimalPlace = document.getElementById("decimalPlace").value;  //小数点以下の桁数
     let scrollOpti = document.getElementById("optimization").checked;  //最適化 true/false
@@ -476,161 +476,6 @@ function executionButtonClicked(){
                 case "ratio":
                     value = ratio(startValue, endValue, nowSecond / totalSecond) / nowBPM;
                     break;
-
-                //イージング
-                case "ease":
-                    switch (easeType){
-                        //Linear
-                        case "linear":
-                            value = (startValue + (endValue - startValue) * linear(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Sine
-                        case "easeInSine":
-                            value = (startValue + (endValue - startValue) * easeInSine(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutSine":
-                            value = (startValue + (endValue - startValue) * easeOutSine(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutSine":
-                            value = (startValue + (endValue - startValue) * easeInOutSine(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInSine":
-                            value = (startValue + (endValue - startValue) * easeOutInSine(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Quad
-                        case "easeInQuad":
-                            value = (startValue + (endValue - startValue) * easeInQuad(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutQuad":
-                            value = (startValue + (endValue - startValue) * easeOutQuad(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutQuad":
-                            value = (startValue + (endValue - startValue) * easeInOutQuad(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInQuad":
-                            value = (startValue + (endValue - startValue) * easeOutInQuad(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Cubic
-                        case "easeInCubic":
-                            value = (startValue + (endValue - startValue) * easeInCubic(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutCubic":
-                            value = (startValue + (endValue - startValue) * easeOutCubic(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutCubic":
-                            value = (startValue + (endValue - startValue) * easeInOutCubic(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInCubic":
-                            value = (startValue + (endValue - startValue) * easeOutInCubic(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Quart
-                        case "easeInQuart":
-                            value = (startValue + (endValue - startValue) * easeInQuart(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutQuart":
-                            value = (startValue + (endValue - startValue) * easeOutQuart(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutQuart":
-                            value = (startValue + (endValue - startValue) * easeInOutQuart(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInQuart":
-                            value = (startValue + (endValue - startValue) * easeOutInQuart(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Quint
-                        case "easeInQuint":
-                            value = (startValue + (endValue - startValue) * easeInQuint(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutQuint":
-                            value = (startValue + (endValue - startValue) * easeOutQuint(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutQuint":
-                            value = (startValue + (endValue - startValue) * easeInOutQuint(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInQuint":
-                            value = (startValue + (endValue - startValue) * easeOutInQuint(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Expo
-                        case "easeInExpo":
-                            value = (startValue + (endValue - startValue) * easeInExpo(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutExpo":
-                            value = (startValue + (endValue - startValue) * easeOutExpo(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutExpo":
-                            value = (startValue + (endValue - startValue) * easeInOutExpo(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInExpo":
-                            value = (startValue + (endValue - startValue) * easeOutInExpo(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Circ
-                        case "easeInCirc":
-                            value = (startValue + (endValue - startValue) * easeInCirc(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutCirc":
-                            value = (startValue + (endValue - startValue) * easeOutCirc(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutCirc":
-                            value = (startValue + (endValue - startValue) * easeInOutCirc(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInCirc":
-                            value = (startValue + (endValue - startValue) * easeOutInCirc(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Back
-                        case "easeInBack":
-                            value = (startValue + (endValue - startValue) * easeInBack(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutBack":
-                            value = (startValue + (endValue - startValue) * easeOutBack(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutBack":
-                            value = (startValue + (endValue - startValue) * easeInOutBack(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInBack":
-                            value = (startValue + (endValue - startValue) * easeOutInBack(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Elastic
-                        case "easeInElastic":
-                            value = (startValue + (endValue - startValue) * easeInElastic(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutElastic":
-                            value = (startValue + (endValue - startValue) * easeOutElastic(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutElastic":
-                            value = (startValue + (endValue - startValue) * easeInOutElastic(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInElastic":
-                            value = (startValue + (endValue - startValue) * easeOutInElastic(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //Bounce
-                        case "easeInBounce":
-                            value = (startValue + (endValue - startValue) * easeInBounce(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutBounce":
-                            value = (startValue + (endValue - startValue) * easeOutBounce(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeInOutBounce":
-                            value = (startValue + (endValue - startValue) * easeInOutBounce(nowSecond / totalSecond)) / nowBPM;
-                            break;
-                        case "easeOutInBounce":
-                            value = (startValue + (endValue - startValue) * easeOutInBounce(nowSecond / totalSecond)) / nowBPM;
-                            break;
-
-                        //一致なし
-                        default:
-                            value = 0;
-                            break;
-                    }
-                    break;
             }
 
 
@@ -647,231 +492,19 @@ function executionButtonClicked(){
 
             //等比
             function ratio(start, end, now){
-                return start * Math.pow(end / start, now);
-            }
+                //return start * Math.pow(end / start, now);
 
-            ////イージング
+                let tmpAccel = ratioAccel;
 
-            //Linear
-            function linear(x)
-            {
-                return x;
-            }
+                    if (start > end)
+                    {
+                        tmpAccel = 1.0 / tmpAccel;
+                    }
 
-            //Sine
-            function easeInSine(x)
-            {
-                return 1 - Math.cos((x * Math.PI) / 2);
-            }
-            function easeOutSine(x)
-            {
-                return Math.sin((x * Math.PI) / 2);
-            }
-            function easeInOutSine(x)
-            {
-                return (x < 0.5) ? (easeInSine(x * 2) / 2) : (easeOutSine((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInSine(x)
-            {
-                return (x < 0.5) ? (easeOutSine(x * 2) / 2) : (easeInSine((x - 0.5) * 2) / 2 + 0.5);
-            }
+                    let tmp1 = start * Math.pow(end / start, Math.pow(now, tmpAccel));
+                    let tmp2 = end * Math.pow(start / end, Math.pow(1 - now, 1.0 / tmpAccel));
 
-            //Quad
-            function easeInQuad(x)
-            {
-                return Math.pow(x, 2);
-            }
-            function easeOutQuad(x)
-            {
-                return 1 - Math.pow(1 - x, 2);
-            }
-            function easeInOutQuad(x)
-            {
-                return (x < 0.5) ? (easeInQuad(x * 2) / 2) : (easeOutQuad((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInQuad(x)
-            {
-                return (x < 0.5) ? (easeOutQuad(x * 2) / 2) : (easeInQuad((x - 0.5) * 2) / 2 + 0.5);
-            }
-
-            //Cubic
-            function easeInCubic(x)
-            {
-                return Math.pow(x, 3);
-            }
-            function easeOutCubic(x)
-            {
-                return 1 - Math.pow(1 - x, 3);
-            }
-            function easeInOutCubic(x)
-            {
-                return (x < 0.5) ? (easeInCubic(x * 2) / 2) : (easeOutCubic((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInCubic(x)
-            {
-                return (x < 0.5) ? (easeOutCubic(x * 2) / 2) : (easeInCubic((x - 0.5) * 2) / 2 + 0.5);
-            }
-
-            //Quart
-            function easeInQuart(x)
-            {
-                return Math.pow(x, 4);
-            }
-            function easeOutQuart(x)
-            {
-                return 1 - Math.pow(1 - x, 4);
-            }
-            function easeInOutQuart(x)
-            {
-                return (x < 0.5) ? (easeInQuart(x * 2) / 2) : (easeOutQuart((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInQuart(x)
-            {
-                return (x < 0.5) ? (easeOutQuart(x * 2) / 2) : (easeInQuart((x - 0.5) * 2) / 2 + 0.5);
-            }
-
-            //Quint
-            function easeInQuint(x)
-            {
-                return Math.pow(x, 5);
-            }
-            function easeOutQuint(x)
-            {
-                return 1 - Math.pow(1 - x, 5);
-            }
-            function easeInOutQuint(x)
-            {
-                return (x < 0.5) ? (easeInQuint(x * 2) / 2) : (easeOutQuint((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInQuint(x)
-            {
-                return (x < 0.5) ? (easeOutQuint(x * 2) / 2) : (easeInQuint((x - 0.5) * 2) / 2 + 0.5);
-            }
-
-            //Expo
-            function easeInExpo(x)
-            {
-                return x == 0 ? 0 : Math.pow(2, 10 * x - 10);
-            }
-            function easeOutExpo(x)
-            {
-                return x == 1 ? 1 : 1 - Math.pow(2, -10 * x);
-            }
-            function easeInOutExpo(x)
-            {
-                return (x < 0.5) ? (easeInExpo(x * 2) / 2) : (easeOutExpo((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInExpo(x)
-            {
-                return (x < 0.5) ? (easeOutExpo(x * 2) / 2) : (easeInExpo((x - 0.5) * 2) / 2 + 0.5);
-            }
-
-            //Circ
-            function easeInCirc(x)
-            {
-                return 1 - Math.sqrt(1 - Math.pow(x, 2));
-            }
-            function easeOutCirc(x)
-            {
-                return Math.sqrt(1 - Math.pow(x - 1, 2));
-            }
-            function easeInOutCirc(x)
-            {
-                return (x < 0.5) ? (easeInCirc(x * 2) / 2) : (easeOutCirc((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInCirc(x)
-            {
-                return (x < 0.5) ? (easeOutCirc(x * 2) / 2) : (easeInCirc((x - 0.5) * 2) / 2 + 0.5);
-            }
-
-            //Back
-            function easeInBack(x)
-            {
-                const c1 = 1.70158;
-                const c3 = c1 + 1;
-
-                return c3 * Math.pow(x, 3) - c1 * Math.pow(x, 2);
-            }
-            function easeOutBack(x)
-            {
-                const c1 = 1.70158;
-                const c3 = c1 + 1;
-
-                return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
-            }
-            function easeInOutBack(x)
-            {
-                return (x < 0.5) ? (easeInBack(x * 2) / 2) : (easeOutBack((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInBack(x)
-            {
-                return (x < 0.5) ? (easeOutBack(x * 2) / 2) : (easeInBack((x - 0.5) * 2) / 2 + 0.5);
-            }
-
-            //Elastic
-            function easeInElastic(x)
-            {
-                const c4 = (2 * Math.PI) / 3;
-
-                return x == 0
-                  ? 0
-                  : x == 1
-                  ? 1
-                  : -Math.pow(2, 10 * x - 10) * Math.sin((x * 10 - 10.75) * c4);
-            }
-            function easeOutElastic(x)
-            {
-                const c4 = (2 * Math.PI) / 3;
-
-                return x == 0
-                  ? 0
-                  : x == 1
-                  ? 1
-                  : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
-            }
-            function easeInOutElastic(x)
-            {
-                return (x < 0.5) ? (easeInElastic(x * 2) / 2) : (easeOutElastic((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInElastic(x)
-            {
-                return (x < 0.5) ? (easeOutElastic(x * 2) / 2) : (easeInElastic((x - 0.5) * 2) / 2 + 0.5);
-            }
-
-            //Bounce
-            function easeInBounce(x)
-            {
-                return 1 - easeOutBounce(1 - x);
-            }
-            function easeOutBounce(x)
-            {
-                const n1 = 7.5625;
-                const d1 = 2.75;
-
-                if (x < 1 / d1)
-                {
-                    return n1 * x * x;
-                }
-                else if (x < 2 / d1)
-                {
-                    return n1 * (x -= 1.5 / d1) * x + 0.75;
-                }
-                else if (x < 2.5 / d1)
-                {
-                    return n1 * (x -= 2.25 / d1) * x + 0.9375;
-                }
-                else
-                {
-                    return n1 * (x -= 2.625 / d1) * x + 0.984375;
-                }
-            }
-            function easeInOutBounce(x)
-            {
-                return (x < 0.5) ? (easeInBounce(x * 2) / 2) : (easeOutBounce((x - 0.5) * 2) / 2 + 0.5);
-            }
-            function easeOutInBounce(x)
-            {
-                return (x < 0.5) ? (easeOutBounce(x * 2) / 2) : (easeInBounce((x - 0.5) * 2) / 2 + 0.5);
+                    return (tmp1 + tmp2) / 2;
             }
         }
     }
@@ -917,12 +550,20 @@ function changeTypeChanged(){
     let calcType = radioChecked(document.getElementsByName("calcType"));
     let changeType = radioChecked(document.getElementsByName("changeType"));
 
-    //イージングかつ音符基準の場合は、とりあえず等比に変える
-    if(changeType == "ease" && calcType == "note"){
-        document.getElementsByName("changeType").item(1).checked = true;
-        alert("イージングは、秒数基準の計算方式にしか対応していません。");
+    //有効無効を変える
+    if(changeType == "ratio" && calcType == "second"){
+        document.getElementById("ratioAccel").disabled = false;
+    }else{
+        document.getElementById("ratioAccel").disabled = true;
     }
 }
+
+//加速の強さが変更された時の関数
+function ratioAccelChange(){
+    let value = document.getElementById("ratioAccel").value;
+    document.getElementById("ratioAccelText").innerText = parseFloat(value).toFixed(2);
+}
+
 
 //計算方式が変更されたときの関数
 function calcTypeChanged(){
@@ -930,17 +571,22 @@ function calcTypeChanged(){
     let valueType = radioChecked(document.getElementsByName("valueType"));
     let changeType = radioChecked(document.getElementsByName("changeType"));
 
+    //有効無効を変える
+    if(calcType == "note"){
+        document.getElementsByName("valueType").item(1).disabled = false;
+        document.getElementById("ratioAccel").disabled = true;
+    }else if(calcType == "second"){
+        document.getElementsByName("valueType").item(1).disabled = true;
+        if(changeType == "ratio"){
+            document.getElementById("ratioAccel").disabled = false;
+        }
+    }
+
     //増分値かつ秒数基準の場合は、終了値に変える
     if(valueType == "add" && calcType == "second"){
         document.getElementsByName("valueType").item(0).checked = true;
         alert("計算方式が秒数基準の場合は、値の指定方法を増分値指定にすることは出来ません。");
         valueTypeChanged();
-    }
-
-    //イージングかつ音符基準の場合は、とりあえず等比に変える
-    if(changeType == "ease" && calcType == "note"){
-        document.getElementsByName("changeType").item(1).checked = true;
-        alert("イージングは、秒数基準の計算方式にしか対応していません。");
     }
 }
 
@@ -957,4 +603,9 @@ function copyToClipboard(){
             button.innerText = "クリップボードにコピー";
         }, 2000)
     });
+}
+
+//読み込まれた時
+window.onload = function () {
+    document.getElementById("ratioAccel").addEventListener("input", ratioAccelChange);
 }
