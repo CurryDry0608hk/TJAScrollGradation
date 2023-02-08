@@ -261,7 +261,7 @@ function executionButtonClicked(){
 
             //等差の場合
             if(changeType == "diff"){
-                scroll = parseInt(startValue) + (changeValue * nowCount);
+                scroll = Number(startValue) + (changeValue * nowCount);
             //等比の場合
             }else if(changeType == "ratio"){
                 scroll = startValue * Math.pow(changeValue, nowCount);
